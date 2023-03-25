@@ -151,7 +151,7 @@ class HomeScreen extends StatelessWidget {
                         if (matches.numberOfInvalidFiles > 0) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                                "Ignored ${matches.numberOfInvalidFiles} invalid file${matches.numberOfInvalidFiles == 0 ? "s" : ""}"),
+                                "Ignored ${matches.numberOfInvalidFiles} invalid file${matches.numberOfInvalidFiles != 1 ? "s" : ""}"),
                             behavior: SnackBarBehavior.floating,
                           ));
                         }
