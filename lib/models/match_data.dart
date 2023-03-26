@@ -1,4 +1,5 @@
 import 'package:frc_scouting/models/driver_ability.dart';
+import 'package:frc_scouting/models/tournament.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 import 'package:collection/collection.dart';
@@ -56,8 +57,12 @@ class MatchData {
 
   MatchData.fromJson(Map<String, dynamic> json) {
     uuid = json['uuid'];
-    tournament = Constants.shared.tournamentKeys
-        .firstWhere((element) => element.key == json['tournamentKey']);
+    tournament = Constants.shared.tournamentKeys.firstWhereOrNull(
+            (element) => element.key == json['tournamentKey']) ??
+        Tournament(
+          name: "",
+          key: json['tournamentKey'],
+        );
     matchKey = MatchKey.fromJsonUsingShortKeyForm(json['matchKey']).obs;
     teamNumber = RxInt(json['teamNumber']);
     scouterName = RxString(json['scouterName']);

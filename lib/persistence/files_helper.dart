@@ -20,7 +20,7 @@ class FilesHelper {
       if (!ignoreNetworkAddScoutReport) {
         await ScoutingServerAPI.shared.addScoutReport(matchData);
       }
-      
+
       matchData.hasSavedToCloud.value = true;
       await deleteFile(matchData.uuid);
     } catch (e) {
