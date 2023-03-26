@@ -101,9 +101,9 @@ class GameScreen extends StatelessWidget {
   Timer autoTimer = Timer(17.seconds, () {});
 
   final communityEntranceRectangleValues = [
-    GameScreenObject(size: const Size(0.345, 0.130), position: 10),
+    GameScreenObject(size: const Size(0.345, 0.130), position: 12),
     GameScreenObject(size: const Size(0.480, 0.355), position: 11),
-    GameScreenObject(size: const Size(0.840, 0.130), position: 12),
+    GameScreenObject(size: const Size(0.840, 0.130), position: 10),
   ];
 
   var midFieldCargoValues = [
@@ -560,18 +560,15 @@ class GameScreen extends StatelessWidget {
     );
   }
 
-  void addStartingPosition({
-    required RobotAction cargoType,
-    required int index,
-  }) {
+  void addStartingPosition(int index) {
     final positions = {
-      0: 19,
+      0: 17,
       1: 18,
-      2: 17,
+      2: 19,
     };
 
     controller.addEventToTimeline(
-      robotAction: cargoType,
+      robotAction: RobotAction.startingPosition,
       position: positions[index]!,
     );
   }
@@ -592,10 +589,7 @@ class GameScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.0),
           onTap: () {
             resetAndStartTimer();
-            addStartingPosition(
-              cargoType: RobotAction.startingPosition,
-              index: index,
-            );
+            addStartingPosition(index);
             isRobotCarryingCargo.value = false;
             isUserSelectingStartPosition.value = false;
             Navigator.of(context).pop();
@@ -765,10 +759,12 @@ extension GameScreenDialogs on GameScreen {
     );
   }
 
-  Widget objectDialogRectangle(ObjectType objectType,
-      {int position = 0,
-      void Function()? onTapAction,
-      required BuildContext context}) {
+  Widget objectDialogRectangle(
+    ObjectType objectType, {
+    int position = 0,
+    void Function()? onTapAction,
+    required BuildContext context,
+  }) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -784,14 +780,27 @@ extension GameScreenDialogs on GameScreen {
 
             if (isUserSelectingStartPosition.isTrue) {
               resetAndStartTimer();
-            }
 
-            controller.addEventToTimeline(
-              robotAction: objectType == ObjectType.cube
-                  ? RobotAction.pickedUpCube
-                  : RobotAction.pickedUpCone,
-              position: position,
-            );
+              final positions = {
+                0: 17,
+                1: 18,
+                2: 19,
+              };
+
+              controller.addEventToTimeline(
+                robotAction: objectType == ObjectType.cube
+                    ? RobotAction.pickedUpCube
+                    : RobotAction.pickedUpCone,
+                position: positions[position]!,
+              );
+            } else {
+              controller.addEventToTimeline(
+                robotAction: objectType == ObjectType.cube
+                    ? RobotAction.pickedUpCube
+                    : RobotAction.pickedUpCone,
+                position: position,
+              );
+            }
 
             isRobotCarryingCargo.value = true;
 

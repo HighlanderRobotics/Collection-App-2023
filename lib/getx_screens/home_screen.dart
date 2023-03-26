@@ -260,7 +260,7 @@ class HomeScreen extends StatelessWidget {
             return const Padding(
               padding: EdgeInsets.all(20),
               child: Text(
-                  "No Matches Found. Try selecting your name first. If you are using a Backup Scouter or internet is unavailable, try using Match Builder. To refresh data, click the bolt icon and press Network Refresh All"),
+                  "No Matches Found for the selected Scouter. Try selecting your name first. \n\nIf you are using a Backup Scouter or internet is unavailable, try using Match Builder. \n\nTo refresh data, click the bolt icon and press Network Refresh All"),
             );
           },
           modalBottomSheetProps: ModalBottomSheetProps(
