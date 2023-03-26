@@ -1,11 +1,11 @@
-enum AllianceColor { red, blue }
+enum Alliance { red, blue }
 
-extension AllianceColorName on AllianceColor {
+extension AllianceColorName on Alliance {
   String get localizedDescription {
     switch (this) {
-      case AllianceColor.red:
+      case Alliance.red:
         return 'Red';
-      case AllianceColor.blue:
+      case Alliance.blue:
         return 'Blue';
     }
   }

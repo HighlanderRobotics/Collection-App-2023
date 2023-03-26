@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:frc_scouting/getx_screens/view_qrcode_screen.dart';
 import 'package:frc_scouting/models/climbing_challenge.dart';
+import 'package:frc_scouting/models/penalty_card.dart';
 import 'package:frc_scouting/models/robot_roles.dart';
 import 'package:get/get.dart';
 
@@ -42,6 +43,8 @@ class PostGameScreen extends StatelessWidget {
                       robotRoleDropdown(context),
                       const SizedBox(height: 15),
                       driverAbilityDropdown(context),
+                      const SizedBox(height: 15),
+                      penaltyCardDropdown(context),
                       const SizedBox(height: 15),
                       TextField(
                         decoration: const InputDecoration(
@@ -103,6 +106,40 @@ class PostGameScreen extends StatelessWidget {
         },
         modalBottomSheetProps: ModalBottomSheetProps(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor),
+      ),
+    );
+  }
+
+  DropdownSearch<PenaltyCard> penaltyCardDropdown(BuildContext context) {
+    return DropdownSearch<PenaltyCard>(
+      items: PenaltyCard.values,
+      itemAsString: (penaltyCard) => penaltyCard.localizedDescription,
+      selectedItem: controller.matchData.penaltyCard.value,
+      onChanged: (penaltyCard) {
+        if (penaltyCard != null) {
+          controller.matchData.penaltyCard.value = penaltyCard;
+        }
+      },
+      dropdownDecoratorProps: const DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(
+          labelText: "Penalty Card",
+          filled: true,
+        ),
+      ),
+      popupProps: PopupProps.menu(
+        itemBuilder: (context, item, isSelected) {
+          return Padding(
+            padding: const EdgeInsetsDirectional.symmetric(vertical: 5),
+            child: ListTile(
+              title: Text(
+                item.localizedDescription,
+                style: TextStyle(
+                  color: item.color,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
   var matchNumberTxtController = TextEditingController();
   var teamNumberTxtController = TextEditingController();
 
-  var allianceColor = AllianceColor.blue;
+  var allianceColor = Alliance.blue;
 
   HomeScreen() {
     matchNumberTxtController.addListener(() {
@@ -151,7 +151,7 @@ class HomeScreen extends StatelessWidget {
                         if (matches.numberOfInvalidFiles > 0) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                                "Ignored ${matches.numberOfInvalidFiles} invalid file${matches.numberOfInvalidFiles == 0 ? "s" : ""}"),
+                                "Ignored ${matches.numberOfInvalidFiles} invalid file${matches.numberOfInvalidFiles == 1 ? "s" : ""}"),
                             behavior: SnackBarBehavior.floating,
                           ));
                         }
@@ -235,8 +235,8 @@ class HomeScreen extends StatelessWidget {
                                               1)) ??
                                       0) <=
                                   2)
-                              ? AllianceColor.red
-                              : AllianceColor.blue,
+                              ? Alliance.red
+                              : Alliance.blue,
                     ));
               });
             }
@@ -260,7 +260,7 @@ class HomeScreen extends StatelessWidget {
             return const Padding(
               padding: EdgeInsets.all(20),
               child: Text(
-                  "No Matches Found. Try selecting your name first. If you are using a Backup Scouter or internet is unavailable, try using Match Builder. To refresh data, click the bolt icon and press Network Refresh All"),
+                  "No Matches Found for the selected Scouter. Try selecting your name first. \n\nIf you are using a Backup Scouter or internet is unavailable, try using Match Builder. \n\nTo refresh data, click the bolt icon and press Network Refresh All"),
             );
           },
           modalBottomSheetProps: ModalBottomSheetProps(
@@ -363,14 +363,14 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget allianceColorDropdown() {
-    return DropdownSearch<AllianceColor>(
+    return DropdownSearch<Alliance>(
       dropdownDecoratorProps: const DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
           labelText: "Alliance Color",
           filled: true,
         ),
       ),
-      items: AllianceColor.values,
+      items: Alliance.values,
       onChanged: (allianceColor) {
         if (allianceColor != null) {
           this.allianceColor = allianceColor;

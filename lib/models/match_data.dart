@@ -10,6 +10,7 @@ import 'match_type.dart';
 
 import 'climbing_challenge.dart';
 import 'event.dart';
+import 'penalty_card.dart';
 import 'robot_roles.dart';
 
 class MatchData {
@@ -30,6 +31,7 @@ class MatchData {
   var hasSavedToCloud = false.obs;
   var tournament = Constants.shared.tournamentKeys.first;
   var driverAbility = DriverAbility.average.obs;
+  var penaltyCard = PenaltyCard.none.obs;
 
   String get tbaKey {
     if (matchKey != null.obs) {
@@ -68,6 +70,7 @@ class MatchData {
         ClimbingChallenge.values[json['autoChallengeResult']].obs;
     challengeResult = ClimbingChallenge.values[json['challengeResult']].obs;
     driverAbility = DriverAbility.values[json['driverAbility']].obs;
+    penaltyCard = PenaltyCard.values[json['penaltyCard']].obs;
 
     if (json.containsKey("hasSavedToCloud")) {
       hasSavedToCloud = RxBool(json['hasSavedToCloud']);
@@ -98,6 +101,7 @@ class MatchData {
         'autoChallengeResult': autoChallengeResult.value.index,
         'challengeResult': challengeResult.value.index,
         'driverAbility': driverAbility.value.index,
+        'penaltyCard': penaltyCard.value.index,
         if (includeUploadStatus) 'hasSavedToCloud': hasSavedToCloud.isTrue,
       };
 }

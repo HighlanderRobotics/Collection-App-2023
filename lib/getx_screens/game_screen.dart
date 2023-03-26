@@ -36,11 +36,11 @@ class GameScreen extends StatelessWidget {
 
   GameScreen({
     required this.isInteractive,
-    this.alliance = AllianceColor.blue,
+    this.alliance = Alliance.blue,
   });
 
   final bool isInteractive;
-  final AllianceColor alliance;
+  final Alliance alliance;
 
   var isUserSelectingStartPosition = true.obs;
   var isRobotCarryingCargo = true.obs;
@@ -101,9 +101,9 @@ class GameScreen extends StatelessWidget {
   Timer autoTimer = Timer(17.seconds, () {});
 
   final communityEntranceRectangleValues = [
-    GameScreenObject(size: const Size(0.345, 0.130), position: 10),
+    GameScreenObject(size: const Size(0.345, 0.130), position: 12),
     GameScreenObject(size: const Size(0.480, 0.355), position: 11),
-    GameScreenObject(size: const Size(0.840, 0.130), position: 12),
+    GameScreenObject(size: const Size(0.840, 0.130), position: 10),
   ];
 
   var midFieldCargoValues = [
@@ -118,7 +118,7 @@ class GameScreen extends StatelessWidget {
   ].obs;
 
   List<GameScreenObject> get midCargoRotatonValues {
-    return alliance == AllianceColor.blue
+    return alliance == Alliance.blue
         ? midFieldCargoValues.take(4).toList()
         : midFieldCargoValues.skip(4).toList();
   }
@@ -255,7 +255,7 @@ class GameScreen extends StatelessWidget {
                         color: Colors.white,
                       ),
                       initialOffset: Offset(
-                        alliance == AllianceColor.blue
+                        alliance == Alliance.blue
                             ? 70
                             : boxDecorationSize.width - 150,
                         0,
@@ -323,7 +323,7 @@ class GameScreen extends StatelessWidget {
                         }
                       },
                       initialOffset: Offset(
-                        alliance == AllianceColor.blue
+                        alliance == Alliance.blue
                             ? 140
                             : boxDecorationSize.width - 80,
                         0,
@@ -397,12 +397,8 @@ class GameScreen extends StatelessWidget {
     return Positioned(
       top: getTopToBoxDecorationHeight() +
           boxDecorationSize.height * object.size.width,
-      left: alliance == AllianceColor.blue
-          ? boxDecorationSize.width * 0.185
-          : null,
-      right: alliance == AllianceColor.red
-          ? boxDecorationSize.width * 0.185
-          : null,
+      left: alliance == Alliance.blue ? boxDecorationSize.width * 0.185 : null,
+      right: alliance == Alliance.red ? boxDecorationSize.width * 0.185 : null,
       child: InkWell(
         child: Obx(
           () => createCustomEventWidget(
@@ -463,8 +459,8 @@ class GameScreen extends StatelessWidget {
 
   Positioned createSubstationRectangle(BuildContext context) {
     return Positioned(
-      left: alliance == AllianceColor.red ? 0 : null,
-      right: alliance == AllianceColor.blue ? 0 : null,
+      left: alliance == Alliance.red ? 0 : null,
+      right: alliance == Alliance.blue ? 0 : null,
       top: getTopToBoxDecorationHeight(),
       child: InkWell(
         child: Obx(
@@ -502,8 +498,8 @@ class GameScreen extends StatelessWidget {
     return Positioned(
       bottom: getBottomToBoxDecorationHeight() +
           boxDecorationSize.height * index * 0.22,
-      left: alliance == AllianceColor.blue ? 0 : null,
-      right: alliance == AllianceColor.red ? 0 : null,
+      left: alliance == Alliance.blue ? 0 : null,
+      right: alliance == Alliance.red ? 0 : null,
       child: InkWell(
         child: Obx(
           () => createCustomEventWidget(
@@ -557,18 +553,15 @@ class GameScreen extends StatelessWidget {
     );
   }
 
-  void addStartingPosition({
-    required RobotAction cargoType,
-    required int index,
-  }) {
+  void addStartingPosition(int index) {
     final positions = {
-      0: 19,
+      0: 17,
       1: 18,
-      2: 17,
+      2: 19,
     };
 
     controller.addEventToTimeline(
-      robotAction: cargoType,
+      robotAction: RobotAction.startingPosition,
       position: positions[index]!,
     );
   }
@@ -589,10 +582,7 @@ class GameScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.0),
           onTap: () {
             resetAndStartTimer();
-            addStartingPosition(
-              cargoType: RobotAction.startingPosition,
-              index: index,
-            );
+            addStartingPosition(index);
             isRobotCarryingCargo.value = false;
             isUserSelectingStartPosition.value = false;
             Navigator.of(context).pop();
@@ -758,10 +748,12 @@ extension GameScreenDialogs on GameScreen {
     );
   }
 
-  Widget objectDialogRectangle(ObjectType objectType,
-      {int position = 0,
-      void Function()? onTapAction,
-      required BuildContext context}) {
+  Widget objectDialogRectangle(
+    ObjectType objectType, {
+    int position = 0,
+    void Function()? onTapAction,
+    required BuildContext context,
+  }) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -777,20 +769,33 @@ extension GameScreenDialogs on GameScreen {
 
             if (isUserSelectingStartPosition.isTrue) {
               resetAndStartTimer();
-            }
 
-            controller.addEventToTimeline(
-              robotAction: objectType == ObjectType.cube
-                  ? RobotAction.pickedUpCube
-                  : RobotAction.pickedUpCone,
-              position: position,
-            );
+              final positions = {
+                0: 17,
+                1: 18,
+                2: 19,
+              };
+
+              controller.addEventToTimeline(
+                robotAction: objectType == ObjectType.cube
+                    ? RobotAction.pickedUpCube
+                    : RobotAction.pickedUpCone,
+                position: positions[position]!,
+              );
+            } else {
+              controller.addEventToTimeline(
+                robotAction: objectType == ObjectType.cube
+                    ? RobotAction.pickedUpCube
+                    : RobotAction.pickedUpCone,
+                position: position,
+              );
+            }
 
             isRobotCarryingCargo.value = true;
 
             Navigator.of(context).pop();
 
-            if (onTapAction != null) onTapAction();
+            onTapAction?.call();
           },
           child: Container(
             decoration: BoxDecoration(
