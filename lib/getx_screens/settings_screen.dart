@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +13,6 @@ import 'package:get/get.dart';
 import '../helpers/shared_preferences_helper.dart';
 import '../models/settings_screen_variables.dart';
 import '../services/getx_business_logic.dart';
-import '../models/game_configuration_rotation.dart';
 import 'server_authority_setup_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -81,7 +78,9 @@ class SettingsScreen extends StatelessWidget {
                     popupProps: PopupProps.modalBottomSheet(
                       errorBuilder: (context, searchEntry, exception) {
                         Navigator.of(context).pop();
+
                         Fluttertoast.cancel();
+
                         Fluttertoast.showToast(
                           msg: "Failed to fetch server tournaments: $exception",
                           gravity: ToastGravity.TOP,

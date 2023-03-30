@@ -31,6 +31,7 @@ class PostGameScreen extends StatelessWidget {
           title: const Text("Post Game"),
         ),
         body: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           padding: const EdgeInsets.all(20.0),
           child: SafeArea(
             child: Obx(

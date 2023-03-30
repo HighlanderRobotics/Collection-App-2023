@@ -119,8 +119,8 @@ class GameScreen extends StatelessWidget {
 
   List<GameScreenObject> get midCargoRotatonValues {
     return alliance == Alliance.blue
-        ? midFieldCargoValues.take(4).toList()
-        : midFieldCargoValues.skip(4).toList();
+        ? midFieldCargoValues.where((p0) => p0.size.width == 0.408).toList()
+        : midFieldCargoValues.where((p0) => p0.size.width != 0.408).toList();
   }
 
   @override
@@ -289,7 +289,10 @@ class GameScreen extends StatelessWidget {
                       isRobotCarryingCargo.isTrue &&
                       isUserSelectingStartPosition.isFalse)
                     draggableFloatingActionButtonWidget(
-                      icon: const Icon(Icons.conveyor_belt),
+                      icon: const Icon(
+                        Icons.conveyor_belt,
+                        color: Colors.white,
+                      ),
                       onTapAction: () {
                         if (isAutoInProgress.isTrue) {
                           print("Finishing Auto Timer");
@@ -560,16 +563,26 @@ class GameScreen extends StatelessWidget {
     );
   }
 
-  void addStartingPosition(int index) {
-    final positions = {
-      0: 17,
-      1: 18,
-      2: 19,
-    };
+  get startingPositions {
+    if (variables.rotation.value == GameConfigurationRotation.standard) {
+      return {
+        0: 17,
+        1: 18,
+        2: 19,
+      };
+    } else {
+      return {
+        0: 19,
+        1: 18,
+        2: 17,
+      };
+    }
+  }
 
+  void addStartingPosition(int index) {
     controller.addEventToTimeline(
       robotAction: RobotAction.startingPosition,
-      position: positions[index]!,
+      position: startingPositions[index]!,
     );
   }
 
@@ -781,17 +794,11 @@ extension GameScreenDialogs on GameScreen {
             if (isUserSelectingStartPosition.isTrue) {
               resetAndStartTimer();
 
-              final positions = {
-                0: 17,
-                1: 18,
-                2: 19,
-              };
-
               controller.addEventToTimeline(
                 robotAction: objectType == ObjectType.cube
                     ? RobotAction.pickedUpCube
                     : RobotAction.pickedUpCone,
-                position: positions[position]!,
+                position: startingPositions[position]!,
               );
             } else {
               controller.addEventToTimeline(

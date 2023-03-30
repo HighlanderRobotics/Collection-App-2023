@@ -4,9 +4,9 @@ extension RotationExtension on GameConfigurationRotation {
   String get localizedDescription {
     switch (this) {
       case GameConfigurationRotation.standard:
-        return "Standard";
+        return "Auspicious";
       case GameConfigurationRotation.inversed:
-        return "Inversed";
+        return "Sinister";
     }
   }
 
