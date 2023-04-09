@@ -12,7 +12,7 @@ To build, open folder in VSCode or Android Studio. Make sure to build using dart
 | 1     | Docked                | The charge station is balanced and signaled by the LED's being lit |
 | 2     | Engaged               | The charge station is tipped, but the robots are fully supported by the charge station and not touching the ground      |
 | 3     | Failed                | The robot was attempting to Dock or Engage with the Charge Station but was unsuccessful              |
-| 4     | In Community          | The robot did not attempt to climb, but still was in the community                                   |
+| 4     | Mobility              | The robot left the community during auto                                                             |
 
 ## Teleop Charge Station
 
@@ -22,7 +22,7 @@ To build, open folder in VSCode or Android Studio. Make sure to build using dart
 | 1     | Docked                | The robot is securely attached to the Charge Station and is not touching any other part of the field |
 | 2     | Engaged               | The robot is securely attached to the Charge Station and is touching another part of the field.      |
 | 3     | Failed                | The robot was attempting to Dock or Engage with the Charge Station but was unsuccessful              |
-| 4     | Mobility              | The robot left the community during auto                                                             |
+| 4     | In Community          | The robot did not attempt to climb, but still was in the community                                   |
 
 
 ## Robot Actions
