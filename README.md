@@ -9,7 +9,7 @@ To build, open folder in VSCode or Android Studio. Make sure to build using dart
 | Index | Localized Description | Long Localized Description                                                                           |
 |-------|-----------------------|------------------------------------------------------------------------------------------------------|
 | 0     | No Climb              | Did not attempt to climb                                                                             |
-| 1     | Docked                | The charge station is balanced and signaled by the LED's being lit |
+| 1     | Docked                | The charge station is balanced and signaled by the LEDs being lit |
 | 2     | Engaged               | The charge station is tipped, but the robots are fully supported by the charge station and not touching the ground      |
 | 3     | Failed                | The robot was attempting to Dock or Engage with the Charge Station but was unsuccessful              |
 | 4     | Mobility              | The robot left the community during auto                                                             |
@@ -19,7 +19,7 @@ To build, open folder in VSCode or Android Studio. Make sure to build using dart
 | Index | Localized Description | Long Localized Description                                                                           |
 |-------|-----------------------|------------------------------------------------------------------------------------------------------|
 | 0     | No Climb              | Did not attempt to climb                                                                             |
-| 1     | Docked                | The charge station is balanced and signaled by the LED's being lit |
+| 1     | Docked                | The charge station is balanced and signaled by the LEDs being lit |
 | 2     | Engaged               | The charge station is tipped, but the robots are fully supported by the charge station and not touching the ground      |
 | 3     | Failed                | The robot was attempting to Dock or Engage with the Charge Station but was unsuccessful              |
 | 4     | In Community          | The robot did not attempt to climb, but still was in the community                                   |
