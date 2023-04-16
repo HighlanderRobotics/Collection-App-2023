@@ -89,12 +89,10 @@ class BusinessLogicController extends GetxController {
     super.onInit();
   }
 
-  Orientation get currentOrientation {
-    return Get.mediaQuery.orientation;
-  }
+  Orientation get currentOrientation => Get.mediaQuery.orientation;
 
-  void setPortraitOrientation() {
-    SystemChrome.setPreferredOrientations(
+  Future setPortraitOrientation() async {
+    await SystemChrome.setPreferredOrientations(
       [
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -102,8 +100,8 @@ class BusinessLogicController extends GetxController {
     );
   }
 
-  void setLandscapeOrientation() {
-    SystemChrome.setPreferredOrientations(
+  Future setLandscapeOrientation() async {
+    await SystemChrome.setPreferredOrientations(
       [
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
@@ -111,22 +109,23 @@ class BusinessLogicController extends GetxController {
     );
   }
 
-  void resetOrientation() {
-    SystemChrome.setPreferredOrientations(
-      [
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ],
-    );
-
-    SystemChrome.setPreferredOrientations(
-      [
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ],
-    );
+  Future resetOrientation() async {
+    await Future.wait([
+      SystemChrome.setPreferredOrientations(
+        [
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ],
+      ),
+      SystemChrome.setPreferredOrientations(
+        [
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ],
+      ),
+    ]);
   }
 
   void addEventToTimeline(

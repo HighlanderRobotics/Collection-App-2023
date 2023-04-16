@@ -27,12 +27,13 @@ class MatchData {
   var events = <Event>[].obs;
   var robotRole = RobotRole.offense.obs;
   var notes = "".obs;
-  var autoChallengeResult = ClimbingChallenge.noClimb.obs;
-  var challengeResult = ClimbingChallenge.noClimb.obs;
+  var autoChallengeResult = AutonClimbingChallenge.noClimb.obs;
+  var challengeResult = TeleopClimbingChallenge.noClimb.obs;
   var hasSavedToCloud = false.obs;
   var tournament = Constants.shared.tournamentKeys.first;
   var driverAbility = DriverAbility.average.obs;
   var penaltyCard = PenaltyCard.none.obs;
+  var links = 0.obs;
 
   String get tbaKey {
     if (matchKey != null.obs) {
@@ -72,10 +73,12 @@ class MatchData {
     robotRole = RobotRole.values[json['robotRole']].obs;
     notes = RxString(json['notes']);
     autoChallengeResult =
-        ClimbingChallenge.values[json['autoChallengeResult']].obs;
-    challengeResult = ClimbingChallenge.values[json['challengeResult']].obs;
+        AutonClimbingChallenge.values[json['autoChallengeResult']].obs;
+    challengeResult =
+        TeleopClimbingChallenge.values[json['challengeResult']].obs;
     driverAbility = DriverAbility.values[json['driverAbility']].obs;
     penaltyCard = PenaltyCard.values[json['penaltyCard']].obs;
+    links = RxInt(json['links']);
 
     if (json.containsKey("hasSavedToCloud")) {
       hasSavedToCloud = RxBool(json['hasSavedToCloud']);
@@ -107,6 +110,7 @@ class MatchData {
         'challengeResult': challengeResult.value.index,
         'driverAbility': driverAbility.value.index,
         'penaltyCard': penaltyCard.value.index,
+        'links': links.value,
         if (includeUploadStatus) 'hasSavedToCloud': hasSavedToCloud.isTrue,
       };
 }

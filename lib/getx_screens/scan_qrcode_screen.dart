@@ -90,16 +90,6 @@ class ScanQrCodeScreen extends StatelessWidget {
               child: SvgPicture.asset('assets/viewfinder.svg'),
             ),
           ),
-
-          // Icon(
-          //     IconData(0xf88d,
-          //         fontFamily: "sf_pro_thin", fontPackage: "cupertino_icons"),
-          //     color: Colors.white.withOpacity(0.5),
-          //     size: 100.0),
-
-          // Icon(CupertinoIcons.viewfinder,
-          //     size: Get.mediaQuery.size.width,
-          //     color: Colors.white.withOpacity(0.7)),
         ],
       ),
     );

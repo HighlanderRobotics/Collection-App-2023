@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frc_scouting/models/alliance_color.dart';
-import 'package:holding_gesture/holding_gesture.dart';
 
+import '../models/game_screen_object.dart';
 import '../models/settings_screen_variables.dart';
 import '../models/game_configuration_rotation.dart';
 import '../models/levels.dart';
@@ -19,16 +19,6 @@ import '../services/draggable_floating_action_button.dart';
 import '../services/getx_business_logic.dart';
 
 import 'package:flutter/foundation.dart' as Foundation;
-
-class GameScreenObject {
-  Size size;
-  int position;
-
-  GameScreenObject({
-    required this.size,
-    required this.position,
-  });
-}
 
 class GameScreen extends StatelessWidget {
   final controller = Get.find<BusinessLogicController>();
@@ -117,6 +107,12 @@ class GameScreen extends StatelessWidget {
     GameScreenObject(size: const Size(0.553, 0.087), position: 16),
   ].obs;
 
+  GameScreenObject get teleopMidFieldCargo {
+    return alliance == Alliance.blue
+        ? GameScreenObject(size: const Size(0.4, 0.36), position: 13)
+        : GameScreenObject(size: const Size(0.545, 0.36), position: 13);
+  }
+
   List<GameScreenObject> get midCargoRotatonValues {
     return alliance == Alliance.blue
         ? midFieldCargoValues.where((p0) => p0.size.width == 0.408).toList()
@@ -143,16 +139,14 @@ class GameScreen extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: !isInteractive
             ? null
-            : Obx(
-                () => Row(
-                  children: [
-                    const SizedBox(width: 15),
-                    if (isAutoInProgress.isFalse) backFloatingActionButton(),
-                    const Spacer(),
-                    nextFloatingActionButton(),
-                    const SizedBox(width: 15),
-                  ],
-                ),
+            : Row(
+                children: [
+                  const SizedBox(width: 15),
+                  backFloatingActionButton(),
+                  const Spacer(),
+                  nextFloatingActionButton(),
+                  const SizedBox(width: 15),
+                ],
               ),
       ),
     );
@@ -235,7 +229,11 @@ class GameScreen extends StatelessWidget {
               for (final index in communityEntranceRectangleValues)
                 createCommunityEntranceMethodRectangle(object: index),
             for (final index in midCargoRotatonValues)
-              createFieldCargoCircle(object: index, context: context),
+              if (isAutoInProgress.isTrue)
+                createFieldCargoCircle(object: index, context: context)
+              else
+                createTeleopFieldCargoRectangle(
+                    object: teleopMidFieldCargo, context: context),
             if (isInteractive && isAutoInProgress.isFalse)
               createSubstationRectangle(context),
             Transform.rotate(
@@ -277,6 +275,7 @@ class GameScreen extends StatelessWidget {
                               widgets: ObjectType.values
                                   .map((objectType) => objectDialogRectangle(
                                       objectType,
+                                      position: 0,
                                       context: context))
                                   .toList(),
                               context: context,
@@ -318,6 +317,7 @@ class GameScreen extends StatelessWidget {
                               widgets: ObjectType.values
                                   .map((objectType) => objectDialogRectangle(
                                       objectType,
+                                      position: 0,
                                       context: context))
                                   .toList(),
                               context: context,
@@ -333,10 +333,8 @@ class GameScreen extends StatelessWidget {
                       ),
                     ),
                   if (isInteractive && isUserSelectingStartPosition.isFalse)
-                    HoldDetector(
-                      enableHapticFeedback: true,
-                      onTap: () => {print("On Tap!")},
-                      onHold: () {
+                    InkWell(
+                      onTapDown: (_) {
                         if (isRobotDefending.isFalse) {
                           isRobotDefending.value = true;
 
@@ -348,10 +346,24 @@ class GameScreen extends StatelessWidget {
                           HapticFeedback.mediumImpact();
                         }
                       },
-                      onCancel: () {
+                      onTapUp: (_) {
                         isRobotDefending.value = false;
+
                         controller.addEventToTimeline(
-                            robotAction: RobotAction.endDefense, position: 0);
+                          robotAction: RobotAction.endDefense,
+                          position: 0,
+                        );
+
+                        HapticFeedback.mediumImpact();
+                      },
+                      onTapCancel: () {
+                        isRobotDefending.value = false;
+
+                        controller.addEventToTimeline(
+                          robotAction: RobotAction.endDefense,
+                          position: 0,
+                        );
+
                         HapticFeedback.mediumImpact();
                       },
                       child: Container(
@@ -378,9 +390,7 @@ class GameScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          isUserSelectingStartPosition.isTrue
-                              ? "Select Start Position"
-                              : "Team ${controller.matchData.teamNumber.toString()} • ${isAutoInProgress.isTrue ? "Auton" : "Teleop"}",
+                          "Team ${controller.matchData.teamNumber.toString()} • ${isUserSelectingStartPosition.isTrue ? "Select Start Position" : isAutoInProgress.isTrue ? "Auton" : "Teleop"}",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -451,8 +461,54 @@ class GameScreen extends StatelessWidget {
               context: context,
               builder: (context) => createGameImmersiveDialog(
                 widgets: ObjectType.values
-                    .map((objectType) => objectDialogRectangle(objectType,
-                        position: object.position, context: context))
+                    .map((objectType) => objectDialogRectangle(
+                          objectType,
+                          position: object.position,
+                          context: context,
+                        ))
+                    .toList(),
+                context: context,
+                onCloseButtonPressed: () {
+                  midFieldCargoValues.add(object);
+                },
+              ),
+            );
+            midFieldCargoValues.remove(object);
+          }
+        },
+      ),
+    );
+  }
+
+  Positioned createTeleopFieldCargoRectangle({
+    required GameScreenObject object,
+    required BuildContext context,
+  }) {
+    return Positioned(
+      left: boxDecorationSize.width * object.size.width - 4,
+      top: getBottomToBoxDecorationHeight() +
+          boxDecorationSize.height * object.size.height -
+          4,
+      child: InkWell(
+        child: Obx(
+          () => createCustomEventWidget(
+            boxShape: BoxShape.rectangle,
+            width: boxDecorationSize.width * 0.07,
+            height: boxDecorationSize.width * 0.3,
+            isDisabled: isRobotCarryingCargo.isTrue,
+          ),
+        ),
+        onTap: () async {
+          if (isRobotCarryingCargo.isFalse || isInteractive == false) {
+            await showDialog(
+              context: context,
+              builder: (context) => createGameImmersiveDialog(
+                widgets: ObjectType.values
+                    .map((objectType) => objectDialogRectangle(
+                          objectType,
+                          position: object.position,
+                          context: context,
+                        ))
                     .toList(),
                 context: context,
                 onCloseButtonPressed: () {
@@ -487,8 +543,8 @@ class GameScreen extends StatelessWidget {
               context: context,
               builder: (context) => createGameImmersiveDialog(
                 widgets: ObjectType.values
-                    .map((objectType) =>
-                        objectDialogRectangle(objectType, context: context))
+                    .map((objectType) => objectDialogRectangle(objectType,
+                        position: 0, context: context))
                     .toList(),
                 context: context,
               ),
@@ -532,6 +588,7 @@ class GameScreen extends StatelessWidget {
                           )
                         : objectDialogRectangle(
                             objectType,
+                            position: index,
                             context: context,
                             onTapAction: () {
                               HapticFeedback.mediumImpact();
@@ -774,7 +831,7 @@ extension GameScreenDialogs on GameScreen {
 
   Widget objectDialogRectangle(
     ObjectType objectType, {
-    int position = 0,
+    required int position,
     void Function()? onTapAction,
     required BuildContext context,
   }) {

@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frc_scouting/getx_screens/view_qrcode_screen.dart';
 import 'package:frc_scouting/models/climbing_challenge.dart';
 import 'package:frc_scouting/models/penalty_card.dart';
@@ -37,6 +38,8 @@ class PostGameScreen extends StatelessWidget {
             child: Obx(
               (() => Column(
                     children: [
+                      linksTextField(),
+                      const SizedBox(height: 15),
                       autonClimbingChallengeDropdown(context),
                       const SizedBox(height: 15),
                       climbingChallengeDropdown(context),
@@ -47,16 +50,7 @@ class PostGameScreen extends StatelessWidget {
                       const SizedBox(height: 15),
                       penaltyCardDropdown(context),
                       const SizedBox(height: 15),
-                      TextField(
-                        decoration: const InputDecoration(
-                          labelText: "Notes",
-                          filled: true,
-                        ),
-                        controller: notesController,
-                        onChanged: (text) =>
-                            controller.matchData.notes.value = text,
-                        maxLines: null,
-                      ),
+                      notesTextField(),
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
@@ -75,10 +69,22 @@ class PostGameScreen extends StatelessWidget {
     );
   }
 
-  DropdownSearch<ClimbingChallenge> climbingChallengeDropdown(
+  TextField notesTextField() {
+    return TextField(
+      decoration: const InputDecoration(
+        labelText: "Notes",
+        filled: true,
+      ),
+      controller: notesController,
+      onChanged: (text) => controller.matchData.notes.value = text,
+      maxLines: null,
+    );
+  }
+
+  DropdownSearch<TeleopClimbingChallenge> climbingChallengeDropdown(
       BuildContext context) {
-    return DropdownSearch<ClimbingChallenge>(
-      items: ClimbingChallenge.values,
+    return DropdownSearch<TeleopClimbingChallenge>(
+      items: TeleopClimbingChallenge.values,
       itemAsString: (climbingChallenge) =>
           climbingChallenge.localizedDescription,
       selectedItem: controller.matchData.challengeResult.value,
@@ -145,10 +151,10 @@ class PostGameScreen extends StatelessWidget {
     );
   }
 
-  DropdownSearch<ClimbingChallenge> autonClimbingChallengeDropdown(
+  DropdownSearch<AutonClimbingChallenge> autonClimbingChallengeDropdown(
       BuildContext context) {
-    return DropdownSearch<ClimbingChallenge>(
-      items: ClimbingChallenge.values,
+    return DropdownSearch<AutonClimbingChallenge>(
+      items: AutonClimbingChallenge.values,
       itemAsString: (climbingChallenge) =>
           climbingChallenge.localizedDescription,
       selectedItem: controller.matchData.autoChallengeResult.value,
@@ -281,6 +287,22 @@ class PostGameScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget linksTextField() {
+    return TextField(
+      decoration: const InputDecoration(
+        labelText: "Number of Links",
+        filled: true,
+      ),
+      maxLines: null,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+      onChanged: (value) =>
+          controller.matchData.links.value = int.tryParse(value) ?? 0,
     );
   }
 }

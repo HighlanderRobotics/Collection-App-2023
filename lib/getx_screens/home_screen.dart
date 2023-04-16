@@ -31,11 +31,17 @@ class HomeScreen extends StatelessWidget {
   var alliance = Alliance.blue;
 
   HomeScreen() {
+    matchNumberTxtController.removeListener(() {});
+    teamNumberTxtController.removeListener(() {});
+
     matchNumberTxtController.addListener(() {
-      controller.matchData.matchKey.value.ordinalMatchNumber = int.parse(
-          matchNumberTxtController.text.isEmpty
-              ? "0"
-              : matchNumberTxtController.text);
+      final newMatchNumber = int.parse(matchNumberTxtController.text.isEmpty
+          ? "0"
+          : matchNumberTxtController.text);
+
+      if (newMatchNumber.toString() != "") {
+        controller.matchData.matchKey.value.ordinalMatchNumber = newMatchNumber;
+      }
     });
 
     teamNumberTxtController.addListener(() {
@@ -50,6 +56,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    isCustomMatchSelected.listen((value) {
+      print(value);
+    });
+
     return Obx(
       () => Scaffold(
         appBar: AppBar(
@@ -215,7 +225,7 @@ class HomeScreen extends StatelessWidget {
     return ElevatedButton(
       onPressed: controller.matchData.isPreliminaryDataValid
           ? () async {
-              controller.setLandscapeOrientation();
+              await controller.setLandscapeOrientation();
               controller.matchData.tournament =
                   variables.selectedTournamentKey.value;
 
