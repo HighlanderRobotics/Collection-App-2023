@@ -14,7 +14,7 @@ class Event {
   factory Event.fromJson(List<dynamic> json) {
     return Event(
       timeSince: Duration(seconds: json[0]),
-      action: RobotAction.values[1],
+      action: RobotAction.values[json[1]],
       position: json[2],
     );
   }
