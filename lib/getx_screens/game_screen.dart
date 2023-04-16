@@ -566,9 +566,9 @@ class GameScreen extends StatelessWidget {
   get startingPositions {
     if (variables.rotation.value == GameConfigurationRotation.standard) {
       return {
-        0: 17,
+        2: 17,
         1: 18,
-        2: 19,
+        0: 19,
       };
     } else {
       return {
