@@ -14,4 +14,7 @@ class Constants {
     Tournament(name: "New York Tech Valley Regional 2023", key: "2023nytr"),
     if (kDebugMode) Tournament(name: "Chezy 2022 (debug)", key: "2022cc"),
   ];
+
+  final serverAuthorityRegex = RegExp(
+      "^((((?!-))(xn--)?[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\\.(xn--)?([a-zA-Z0-9\\-]{1,61}|[a-zA-Z0-9-]{1,30}\\.[a-zA-Z]{2,}))|(localhost)|((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4})(:\\d+)?\$");
 }

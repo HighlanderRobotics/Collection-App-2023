@@ -262,7 +262,8 @@ class SettingsScreen extends StatelessWidget {
       () => IconButton(
         icon: Icon(
           Icons.check,
-          color: validServerAuthority.hasMatch(variables.serverAuthority.value)
+          color: Constants.shared.serverAuthorityRegex
+                  .hasMatch(variables.serverAuthority.value)
               ? Colors.green
               : Colors.grey,
         ),
@@ -293,9 +294,6 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  bool hasValidServerAuthority() =>
-      validServerAuthority.hasMatch(variables.serverAuthority.value);
+  bool hasValidServerAuthority() => Constants.shared.serverAuthorityRegex
+      .hasMatch(variables.serverAuthority.value);
 }
-
-RegExp validServerAuthority = RegExp(
-    "^((((?!-))(xn--)?[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\\.(xn--)?([a-zA-Z0-9\\-]{1,61}|[a-zA-Z0-9-]{1,30}\\.[a-zA-Z]{2,}))|(localhost))(:\\d+)?\$");

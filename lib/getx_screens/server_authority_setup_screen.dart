@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../models/constants.dart';
 import '../models/settings_screen_variables.dart';
 import 'scan_qrcode_screen.dart';
 import 'settings_screen.dart';
@@ -32,7 +33,7 @@ class ServerAuthoritySetupScreen extends StatelessWidget {
                     errorStyle:
                         TextStyle(color: Theme.of(context).colorScheme.error),
                     errorMaxLines: 3,
-                    errorText: validServerAuthority
+                    errorText: Constants.shared.serverAuthorityRegex
                             .hasMatch(variables.serverAuthority.value)
                         ? null
                         : "Must be a valid domain not prefixed with \"http://\" or \"https://\""),
@@ -75,6 +76,3 @@ class ServerAuthoritySetupScreen extends StatelessWidget {
     );
   }
 }
-
-RegExp validServerAuthority = RegExp(
-    "^((((?!-))(xn--)?[a-zA-Z0-9][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9]{0,1}\\.(xn--)?([a-zA-Z0-9\\-]{1,61}|[a-zA-Z0-9-]{1,30}\\.[a-zA-Z]{2,}))|(localhost))(:\\d+)?\$");

@@ -160,6 +160,11 @@ class GameScreen extends StatelessWidget {
         child: const Icon(Icons.arrow_back),
         onLongPress: () {
           Get.back();
+          print("Resetting Timers");
+
+          presentPostGameScreenTimer.cancel();
+          autoTimer.cancel();
+          controller.matchData.events.value = [];
         },
       ),
     );
