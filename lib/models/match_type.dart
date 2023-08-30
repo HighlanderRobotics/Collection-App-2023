@@ -1,9 +1,6 @@
 enum MatchType {
   qualifierMatch,
-  quarterFinals,
-  eliminationFinals,
-  semiFinals,
-  finals,
+  eliminationMatch,
 }
 
 extension MatchTypeExtension on MatchType {
@@ -11,14 +8,8 @@ extension MatchTypeExtension on MatchType {
     switch (this) {
       case MatchType.qualifierMatch:
         return "Qualification";
-      case MatchType.quarterFinals:
-        return "Quarter Finals";
-      case MatchType.eliminationFinals:
-        return "Elimination Finals";
-      case MatchType.semiFinals:
-        return "Semi Finals";
-      case MatchType.finals:
-        return "Finals";
+      case MatchType.eliminationMatch:
+        return "Elimination Match";
     }
   }
 
@@ -26,14 +17,8 @@ extension MatchTypeExtension on MatchType {
     switch (this) {
       case MatchType.qualifierMatch:
         return "qm";
-      case MatchType.quarterFinals:
-        return "qf";
-      case MatchType.eliminationFinals:
-        return "ef";
-      case MatchType.semiFinals:
-        return "sf";
-      case MatchType.finals:
-        return "f";
+      case MatchType.eliminationMatch:
+        return "em";
     }
   }
 

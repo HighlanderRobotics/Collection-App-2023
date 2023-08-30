@@ -31,7 +31,7 @@ class MatchKey {
   MatchKey.fromJsonUsingLongKeyForm(String jsonString) {
     try {
       final matchKey =
-          MatchKey.fromJsonUsingShortKeyForm(jsonString.substring(7));
+          MatchKey.fromJsonUsingShortKeyForm(jsonString.split("_")[1]);
       matchType = matchKey.matchType;
       ordinalMatchNumber = matchKey.ordinalMatchNumber;
       rawShortMatchKey = matchKey.rawShortMatchKey;
