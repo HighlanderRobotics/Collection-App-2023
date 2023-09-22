@@ -146,7 +146,7 @@ class BusinessLogicController extends GetxController {
     List<String> qrCodes = [];
     var jsonString = jsonEncode(
         matchData.toJson(includeUploadStatus: false, usesTBAKey: true));
-    const qrCodeLimit = 1000;
+    const qrCodeLimit = 500;
     final scouterPlacement = ScoutersScheduleHelper
         .shared.matchSchedule.value.shifts
         .firstWhere((shift) => shift.matchShiftDuration.range
