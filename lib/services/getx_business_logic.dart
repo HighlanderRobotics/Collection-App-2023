@@ -192,12 +192,12 @@ class BusinessLogicController extends GetxController {
 
   void reset() {
     matchData = MatchData();
-    // Get.offAll(() => HomeScreen());
-    Navigator.pushAndRemoveUntil(
-        Get.context!,
-        MaterialPageRoute<dynamic>(
-          builder: (context) => HomeScreen(),
-        ),
-        (route) => false);
+    Get.offAll(() => HomeScreen());
+    // Navigator.pushAndRemoveUntil(
+    //     Get.context!,
+    //     MaterialPageRoute<dynamic>(
+    //       builder: (context) => HomeScreen(),
+    //     ),
+    //     (route) => false);
   }
 }
