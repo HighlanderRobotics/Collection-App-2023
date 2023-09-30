@@ -234,19 +234,12 @@ class HomeScreen extends StatelessWidget {
                       isInteractive: true,
                       alliance: isCustomMatchSelected.isTrue
                           ? alliance
-                          : ((int.tryParse(controller.matchData.matchKey.value
-                                          .rawShortMatchKey
-                                          .substring(controller
-                                                  .matchData
-                                                  .matchKey
-                                                  .value
-                                                  .rawShortMatchKey
-                                                  .length -
-                                              1)) ??
-                                      0) <=
-                                  2)
-                              ? Alliance.red
-                              : Alliance.blue,
+                          : MatchScheduleHelper.shared.matchSchedule
+                                  .firstWhereOrNull((match) =>
+                                      match.matchKey ==
+                                      controller.matchData.matchKey.value)
+                                  ?.allianceColor ??
+                              Alliance.red,
                     ));
               });
             }

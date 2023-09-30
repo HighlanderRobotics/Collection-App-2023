@@ -1,3 +1,4 @@
+import 'package:frc_scouting/models/alliance_color.dart';
 import 'package:frc_scouting/models/match_key.dart';
 
 import 'match_type.dart';
@@ -16,6 +17,9 @@ class MatchEvent {
   MatchKey matchKey;
 
   int ordinalNumber;
+
+  Alliance get allianceColor =>
+      int.parse(key.split('_').last) <= 2 ? Alliance.red : Alliance.blue;
 
   MatchEvent({
     required this.key,
